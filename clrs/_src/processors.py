@@ -183,6 +183,8 @@ class GATv2(Processor):
     self.mid_head_size = self.mid_size // nb_heads
     self.activation = activation
     self.residual = residual
+    self.previous_attention = None
+    self.changes_in_attention = None
 
   def __call__(
       self,
@@ -266,9 +268,18 @@ class GATv2(Processor):
     if self.activation is not None:
       ret = self.activation(ret)
 
-    print(f'ret shape : {ret.shape}')
+    #print(f'ret shape : {ret.shape}')
     import numpy as np
-    np.save('ret.npy', np.array(ret))
+    #np.save('ret.npy', np.array(ret))
+    
+    if self.previous_attention is None:
+        self.previous_attention = ret.max(axis = 2)
+    else:
+        self.changes_in_attention = ret.max(axis = 2) - self.previous_attention
+        self.previous_attention = ret.max(axis = 2)
+        np.save('changes_in_attention.npy', np.array(self.changes_in_attention))
+      
+    
     return ret
 
 

@@ -266,6 +266,7 @@ class GATv2(Processor):
     if self.activation is not None:
       ret = self.activation(ret)
 
+    print(f'ret : {type(ret)}')
     return ret
 
 

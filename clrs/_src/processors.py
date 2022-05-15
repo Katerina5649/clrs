@@ -266,7 +266,9 @@ class GATv2(Processor):
     if self.activation is not None:
       ret = self.activation(ret)
 
-    print(f'ret : {type(ret)}')
+    print(f'ret shape : {type(ret.shape)}')
+    import numpy as np
+    np.save('ret.npy', np.array(ret))
     return ret
 
 
